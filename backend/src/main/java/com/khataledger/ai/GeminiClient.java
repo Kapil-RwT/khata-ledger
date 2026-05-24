@@ -80,7 +80,7 @@ public class GeminiClient {
                     .bodyValue(body)
                     .retrieve()
                     .bodyToMono(String.class)
-                    .timeout(Duration.ofSeconds(8))
+                    .timeout(Duration.ofSeconds(60))
                     .block();
             JsonNode root = mapper.readTree(raw);
             String text = root.path("candidates").path(0)
