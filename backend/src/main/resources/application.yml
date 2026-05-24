@@ -43,7 +43,7 @@ app:
   ai:
     gemini:
       api-key: ${GEMINI_API_KEY:}       # MUST come from env var. Leave blank to use the local intent router (no external call).
-      model: gemini-1.5-flash
+      model: gemini-flash-lite-latest
       base-url: https://generativelanguage.googleapis.com
   reminder:
     overdue-after-days: 7
