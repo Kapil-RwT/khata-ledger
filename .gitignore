@@ -1,0 +1,28 @@
+### Java / Maven ###
+target/
+*.class
+.mvn/
+mvnw
+mvnw.cmd
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+
+### Node / Vite ###
+node_modules/
+dist/
+.vite/
+.env
+.env.local
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Logs ###
+*.log
+logs/

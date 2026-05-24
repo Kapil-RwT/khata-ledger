@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: khataledger
+      POSTGRES_USER: khata
+      POSTGRES_PASSWORD: khata
+    ports:
+      - "5432:5432"
+    volumes:
+      - khata_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U khata -d khataledger"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/khataledger
+      DB_USERNAME: khata
+      DB_PASSWORD: khata
+      JWT_SECRET: ${JWT_SECRET:-change-me-this-secret-must-be-at-least-32-chars}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    ports:
+      - "8080:8080"
+
+volumes:
+  khata_pg:

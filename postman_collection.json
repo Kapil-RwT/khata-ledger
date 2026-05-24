@@ -1,0 +1,140 @@
+{
+  "info": {
+    "name": "Khata Ledger",
+    "_postman_id": "khata-ledger-001",
+    "description": "Local collection for the Khata Ledger Service. Set baseUrl variable and run Signup or Login first; the token is auto-saved.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth - Signup",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/auth/signup",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"businessName\": \"Ramesh Kirana\",\n  \"phone\": \"9999999999\",\n  \"password\": \"hello123\"\n}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "const r = pm.response.json();",
+            "if (r.token) pm.collectionVariables.set('token', r.token);"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "{{baseUrl}}/api/auth/login",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"phone\": \"9999999999\",\n  \"password\": \"hello123\"\n}"
+        }
+      },
+      "event": [{
+        "listen": "test",
+        "script": {
+          "exec": [
+            "const r = pm.response.json();",
+            "if (r.token) pm.collectionVariables.set('token', r.token);"
+          ]
+        }
+      }]
+    },
+    {
+      "name": "Customers - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{baseUrl}}/api/customers",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Suresh\",\n  \"phone\": \"8888888888\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Customers - List",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/customers"
+      }
+    },
+    {
+      "name": "Transactions - Record CREDIT",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{baseUrl}}/api/customers/1/transactions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"CREDIT\",\n  \"amount\": 500,\n  \"note\": \"samaan\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Transactions - Record DEBIT",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{baseUrl}}/api/customers/1/transactions",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"type\": \"DEBIT\",\n  \"amount\": 200,\n  \"note\": \"part payment\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Ledger - Dashboard",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/ledger/dashboard"
+      }
+    },
+    {
+      "name": "Ledger - Ask",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": "{{baseUrl}}/api/ledger/ask",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"question\": \"Who owes me the most?\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Reminders - Trigger scan",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": "{{baseUrl}}/api/reminders/scan"
+      }
+    }
+  ]
+}
